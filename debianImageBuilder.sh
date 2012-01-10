@@ -19,7 +19,7 @@ echo -n "What size image would you like to create? (in GBs): "
 read image_size
 let "real_image_size = $image_size * 1024 * 1024 * 1024"
 echo ""
-echo -n "Would you like to install any extra packages? (separate them by a space)"
+echo -n "List any extra packages here: (separate them by a space) "
 read extra_packages
 echo "******************************"
 echo "Creating image"
@@ -44,7 +44,7 @@ echo "aptsources=Grip Updates" >> $config_name
 echo "bootstrap=Debian" >> $config_name
 echo "" >> $config_name
 echo "[Debian]" >> $config_name
-echo "packages=" >> $config_name
+echo "packages=$extra_packages" >> $config_name
 echo "source=http://ftp.us.debian.org/debian" >> $config_name
 echo "keyring=debian-archive-keyring" >> $config_name
 echo "suite=squeeze" >> $config_name
