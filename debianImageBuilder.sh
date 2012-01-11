@@ -5,7 +5,7 @@ echo "******************************"
 echo "Setting up variables"
 echo "******************************"
 export image_name=linux.img	
-export build_folder=linux_image/
+export build_folder=linux_image
 export config_name=linuxstrap.config
 let "real_image_size=6442450944"
 echo "******************************"
@@ -48,29 +48,28 @@ echo "packages=$extra_packages" >> $config_name
 echo "source=http://ftp.us.debian.org/debian" >> $config_name
 echo "keyring=debian-archive-keyring" >> $config_name
 echo "suite=squeeze" >> $config_name
-
 echo "******************************"
 echo "Installing packages into image"
 echo "******************************"
-multistrap -d $build_folder -f $config_name
+multistrap -d $build_folder/ -f $config_name
 echo "******************************"
 echo "Modding config files"
 echo "******************************"
-echo "nameserver 4.2.2.2" >> $build_folderetc/resolv.conf
-echo "nameserver 8.8.8.8" >> $build_folderetc/resolv.conf
-echo "nameserver 8.8.4.4" >> $build_folderetc/resolv.conf
-echo "export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin" >> $build_folderetc/bash.bashrc
-echo "export TERM=linux" >> $build_folderetc/bash.bashrc
-echo "export HOME=/root" >> $build_folderetc/bash.bashrc
-echo "export USER=root" >> $build_folderetc/bash.bashrc
-echo "mount -t devpts devpts /dev/pts" >> $build_folderetc/bash.basherc
-echo "mount -t proc prco /proc" >> $build_folderetc/bash.bashrc
-echo "mount -t sysfs sysfs /sys" >> $build_folderetc/bash.bashrc
-echo "127.0.0.1	locahost" >> $build_folderetc/hosts
+echo "nameserver 4.2.2.2" >> $build_folder/etc/resolv.conf
+echo "nameserver 8.8.8.8" >> $build_folder/etc/resolv.conf
+echo "nameserver 8.8.4.4" >> $build_folder/etc/resolv.conf
+echo "export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin" >> $build_folder/etc/bash.bashrc
+echo "export TERM=linux" >> $build_folder/etc/bash.bashrc
+echo "export HOME=/root" >> $build_folder/etc/bash.bashrc
+echo "export USER=root" >> $build_folder/etc/bash.bashrc
+echo "mount -t devpts devpts /dev/pts" >> $build_folder/etc/bash.basherc
+echo "mount -t proc prco /proc" >> $build_folder/etc/bash.bashrc
+echo "mount -t sysfs sysfs /sys" >> $build_folder/etc/bash.bashrc
+echo "127.0.0.1	locahost" >> $build_folder/etc/hosts
 echo "******************************"
 echo "Unmounting image"
 echo "******************************"
-umount $build_folder
+umount $build_folder/
 echo "You will still need to copy the image to your phone, of course."
 echo "After that..."
 echo "1) Use a terminal emulator (i.e. Connectbot) and 'su'"
