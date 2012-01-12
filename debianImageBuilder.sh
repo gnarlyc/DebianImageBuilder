@@ -1,6 +1,7 @@
 # Debian Image Builder
 # Another in a long line of Builder scripts
 # by gnarlyc
+# This scrip is in the public domain. (There's really not much to it.) Thank you, and have a nice day.
 echo "******************************"
 echo "Setting up variables"
 echo "******************************"
