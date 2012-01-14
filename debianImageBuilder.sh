@@ -63,8 +63,8 @@ echo "export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin" >> $build_folder/etc/bash
 echo "export TERM=linux" >> $build_folder/etc/bash.bashrc
 echo "export HOME=/root" >> $build_folder/etc/bash.bashrc
 echo "export USER=root" >> $build_folder/etc/bash.bashrc
-echo "mount -t devpts devpts /dev/pts" >> $build_folder/etc/bash.basherc
-echo "mount -t proc prco /proc" >> $build_folder/etc/bash.bashrc
+echo "mount -t devpts devpts /dev/pts" >> $build_folder/etc/bash.bashrc
+echo "mount -t proc proc /proc" >> $build_folder/etc/bash.bashrc
 echo "mount -t sysfs sysfs /sys" >> $build_folder/etc/bash.bashrc
 echo "127.0.0.1	locahost" >> $build_folder/etc/hosts
 echo "******************************"
