@@ -67,6 +67,7 @@ echo "mount -t devpts devpts /dev/pts" >> $build_folder/etc/bash.bashrc
 echo "mount -t proc proc /proc" >> $build_folder/etc/bash.bashrc
 echo "mount -t sysfs sysfs /sys" >> $build_folder/etc/bash.bashrc
 echo "127.0.0.1	locahost" >> $build_folder/etc/hosts
+echo "deb http://ftp.us.debian.org/debian squeeze main" >> $build_folder/etc/apt/sources.list
 echo "******************************"
 echo "Unmounting image"
 echo "******************************"
