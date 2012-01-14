@@ -45,7 +45,7 @@ echo "aptsources=Grip Updates" >> $config_name
 echo "bootstrap=Debian" >> $config_name
 echo "" >> $config_name
 echo "[Debian]" >> $config_name
-echo "packages=$extra_packages" >> $config_name
+echo "packages=apt $extra_packages" >> $config_name
 echo "source=http://ftp.us.debian.org/debian" >> $config_name
 echo "keyring=debian-archive-keyring" >> $config_name
 echo "suite=squeeze" >> $config_name
