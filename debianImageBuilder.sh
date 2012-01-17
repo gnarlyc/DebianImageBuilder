@@ -5,14 +5,13 @@
 echo "******************************"
 echo "Setting up variables"
 echo "******************************"
-export image_name=linux.img	
-export build_folder=linux_image
-export config_name=linuxstrap.config
+export image_name=debian.img	
+export build_folder=image_folder
 let "real_image_size=6442450944"
 echo "******************************"
 echo "Installing dependencies"
 echo "******************************"
-apt-get install multistrap
+apt-get install debootstrap
 echo "******************************"
 echo "Gather info"
 echo "******************************"
@@ -32,27 +31,10 @@ echo "Mounting image"
 echo "******************************"
 mkdir $build_folder
 mount -o loop -t ext2 $image_name $build_folder
-echo ""
-echo "Buidling multistrap config file"
-echo ""
-echo "[General]" >> $config_name
-echo "arch=armel" >> $config_name
-echo "directory=/opt/multistrap/" >> $config_name
-echo "cleanup=true" >> $config_name
-echo "noauth=false" >> $config_name
-echo "unpack=true" >> $config_name
-echo "aptsources=Grip Updates" >> $config_name
-echo "bootstrap=Debian" >> $config_name
-echo "" >> $config_name
-echo "[Debian]" >> $config_name
-echo "packages=apt $extra_packages" >> $config_name
-echo "source=http://ftp.us.debian.org/debian" >> $config_name
-echo "keyring=debian-archive-keyring" >> $config_name
-echo "suite=squeeze" >> $config_name
 echo "******************************"
 echo "Installing packages into image"
 echo "******************************"
-multistrap -d $build_folder/ -f $config_name
+debootstrap --verbose --foreign --arch armel squeeze $build_folder http://ftp.us.debian.org/debian
 echo "******************************"
 echo "Modding config files"
 echo "******************************"
@@ -78,7 +60,7 @@ echo "1) Use a terminal emulator (i.e. Connectbot) and 'su'"
 echo "2) mkdir /data/local/linux (or something similar)"
 echo "3) mount -o loop -t ext2 /sdcard/$image_name /data/local/linux"
 echo "4) chroot /data/local/linux /bin/bash"
-echo "5) add 'deb http://ftp.us.debian.org/debian squeeze main' to /etc/apt/sources.list"
+echo "5) /debootstrap/debootstrap --second-stage"
 echo "6) apt-get update && apt-get upgrade"
 echo "******************************"
 echo "Of course, I would script as much of that as possible..."
