@@ -50,6 +50,7 @@ echo "mount -t proc proc /proc" >> $build_folder/etc/bash.bashrc
 echo "mount -t sysfs sysfs /sys" >> $build_folder/etc/bash.bashrc
 echo "127.0.0.1	locahost" >> $build_folder/etc/hosts
 echo "deb http://ftp.us.debian.org/debian squeeze main" >> $build_folder/etc/apt/sources.list
+cp setup.sh $build_folder/
 echo "******************************"
 echo "Unmounting image"
 echo "******************************"
@@ -60,8 +61,7 @@ echo "1) Use a terminal emulator (i.e. Connectbot) and 'su'"
 echo "2) mkdir /data/local/linux (or something similar)"
 echo "3) mount -o loop -t ext2 /sdcard/$image_name /data/local/linux"
 echo "4) chroot /data/local/linux /bin/bash"
-echo "5) /debootstrap/debootstrap --second-stage"
-echo "6) apt-get update && apt-get upgrade"
+echo "5) run 'setup.sh' once to finsih debootstrap, fix your repo, and update the install"
 echo "******************************"
 echo "Of course, I would script as much of that as possible..."
 echo "You'll only need #3 and #4 for daily use after the others are done."
