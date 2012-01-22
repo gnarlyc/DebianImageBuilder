@@ -7,7 +7,8 @@ echo "Setting up variables"
 echo "******************************"
 export image_name=debian.img	
 export build_folder=image_folder
-real_image_size=$(6442450944)
+export repo="http://ftp.us.debian.org/debian"
+export variant=squeeze
 echo "******************************"
 echo "Installing dependencies"
 echo "******************************"
@@ -34,7 +35,7 @@ mount -o loop -t ext2 $image_name $build_folder
 echo "******************************"
 echo "Installing packages into image"
 echo "******************************"
-debootstrap --verbose --foreign --include=$extra_packages --arch armel squeeze $build_folder http://ftp.us.debian.org/debian
+debootstrap --verbose --foreign --include=$extra_packages --arch armel $variant $build_folder $repo
 echo "******************************"
 echo "Modding config files"
 echo "******************************"
@@ -49,6 +50,7 @@ echo "mount -t devpts devpts /dev/pts" >> $build_folder/etc/bash.bashrc
 echo "mount -t proc proc /proc" >> $build_folder/etc/bash.bashrc
 echo "mount -t sysfs sysfs /sys" >> $build_folder/etc/bash.bashrc
 echo "127.0.0.1	locahost" >> $build_folder/etc/hosts
+echo $variant >> $build_folder/etc/hostname
 cp setup.sh $build_folder/
 echo "******************************"
 echo "Unmounting image"
