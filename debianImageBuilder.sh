@@ -7,7 +7,7 @@ echo "Setting up variables"
 echo "******************************"
 export image_name=debian.img	
 export build_folder=image_folder
-let "real_image_size=6442450944"
+real_image_size=$(6442450944)
 echo "******************************"
 echo "Installing dependencies"
 echo "******************************"
@@ -17,7 +17,7 @@ echo "Gather info"
 echo "******************************"
 echo -n "What size image would you like to create? (in GBs): "
 read image_size
-let "real_image_size = $image_size * 1024 * 1024 * 1024"
+real_image_size=$(((($image_size * 1024) * 1024) * 1024))
 echo ""
 echo -n "List any extra packages here: (separate them by a comma) "
 read extra_packages
