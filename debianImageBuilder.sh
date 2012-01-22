@@ -19,13 +19,15 @@ echo -n "What size image would you like to create? (in GBs): "
 read image_size
 let "real_image_size = $image_size * 1024 * 1024 * 1024"
 echo ""
-echo -n "List any extra packages here: (separate them by a space) "
+echo -n "List any extra packages here: (separate them by a comma) "
 read extra_packages
+read -p "ENTER"
 echo "******************************"
 echo "Creating image"
 echo "******************************"
 dd if=/dev/zero of=$image_name seek=$real_image_size bs=1 count=1
 mke2fs -F $image_name
+read -p "ENTER"
 echo "******************************"
 echo "Mounting image"
 echo "******************************"
@@ -34,7 +36,7 @@ mount -o loop -t ext2 $image_name $build_folder
 echo "******************************"
 echo "Installing packages into image"
 echo "******************************"
-debootstrap --verbose --foreign --arch armel squeeze $build_folder http://ftp.us.debian.org/debian
+debootstrap --verbose --foreign --include=$extra_packages --arch armel squeeze $build_folder http://ftp.us.debian.org/debian
 echo "******************************"
 echo "Modding config files"
 echo "******************************"
@@ -49,7 +51,6 @@ echo "mount -t devpts devpts /dev/pts" >> $build_folder/etc/bash.bashrc
 echo "mount -t proc proc /proc" >> $build_folder/etc/bash.bashrc
 echo "mount -t sysfs sysfs /sys" >> $build_folder/etc/bash.bashrc
 echo "127.0.0.1	locahost" >> $build_folder/etc/hosts
-echo "deb http://ftp.us.debian.org/debian squeeze main" >> $build_folder/etc/apt/sources.list
 cp setup.sh $build_folder/
 echo "******************************"
 echo "Unmounting image"
