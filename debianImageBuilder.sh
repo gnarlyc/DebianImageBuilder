@@ -21,13 +21,11 @@ let "real_image_size = $image_size * 1024 * 1024 * 1024"
 echo ""
 echo -n "List any extra packages here: (separate them by a comma) "
 read extra_packages
-read -p "ENTER"
 echo "******************************"
 echo "Creating image"
 echo "******************************"
 dd if=/dev/zero of=$image_name seek=$real_image_size bs=1 count=1
 mke2fs -F $image_name
-read -p "ENTER"
 echo "******************************"
 echo "Mounting image"
 echo "******************************"
