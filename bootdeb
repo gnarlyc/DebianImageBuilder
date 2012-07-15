@@ -1,0 +1,112 @@
+#!/system/bin/sh
+
+# Based on Saurik's remount.sh  - modified by Mark Walker of http://www.androidfanatic.com
+# Email admin@androidfanatic.com
+
+# Further work by K.-M. Hansche
+# No more reboot
+# Loopdevice corrected
+# Check for root
+# Free loopdevice
+# Mount several tmpdirs using tmpfs
+# Rebuild resolv.conf on boot(deb)
+
+noroot(){
+	echo "Please become root!"
+	exit 0
+}
+id | grep uid=0 || noroot
+
+export kit=/sdcard/debian
+export bin=/system/bin
+export mnt=/data/local/mnt
+
+busybox=/system/xbin/busybox
+
+bmounts="system data sdcard"
+tmounts="/tmp /var/log"
+tsmounts="/tmp /var/tmp /var/lock"
+
+tmpfssize=20%
+
+export PATH=$bin:/usr/bin:/usr/sbin:/bin:$PATH
+export TERM=linux
+export HOME=/root
+
+[ -b /dev/loop0 ] || mknod /dev/loop0 b 7 0
+[ -d $mnt ] || mkdir $mnt
+
+clear
+echo " "
+echo "               a888a      "
+echo "             d888888b      "
+echo "             8P YP Y88      " 
+echo "             8|o||o|88       "
+echo "             8.    .88       "
+echo "             8 ._.  Y8.      "
+echo "            d/       8b.     "
+echo "          .dP   .     Y8b.    "
+echo "         d8:         ::88b.   "
+echo "        d8             Y88b   "
+echo "       :8P             :888   "
+echo "        8a.    :      _a88P   "
+echo "      ._/ Yaa_ :    .| 88P|   "
+echo "      \    YP        | 8P  \. "
+echo "      /     \._____.d|    .|  "
+echo "       --..__)888888P ._.|"
+echo " "
+echo " "
+
+mount -o loop,noatime -text2 $kit/debian.img $mnt
+
+getprop | grep dns | sed -n -e 's/\[.*\]: \[\([0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\)\]/nameserver \1/ p' | sort -u > ${mnt}/etc/resolv.conf
+
+mount -t devpts devpts $mnt/dev/pts
+mount -t proc proc $mnt/proc
+mount -t sysfs sysfs $mnt/sys
+
+for mt in $tmounts ;do
+	mount -t tmpfs -o size=${tmpfssize} none ${mnt}/${mt};
+done
+
+for mt in $tsmounts ;do
+	mount -t tmpfs -o size=${tmpfssize} none ${mnt}/${mt};
+	chmod 1777 ${mnt}/${mt};
+done
+
+for mt in $bmounts ;do
+	[ -d ${mnt}/android/${mt} ] ||  mkdir -p ${mnt}/android/${mt};
+	mount -o bind /${mt} ${mnt}/android/${mt};
+done
+
+echo "Android directories are mounted under /android/"
+echo
+echo "Type exit to end session"
+echo "Make sure you do a proper exit for a clean kill of Debian!"
+echo " "
+
+chroot $mnt /bin/bash -l -i
+
+#After exit command is executed clear it all up
+echo " "
+echo "Shutting down Debian........"
+[ -d /data/local/mnt/bin ] || exit 0
+
+#Rewrite using lsof
+#fuser -k -m /data/local/mnt/
+#sleep 2
+#fuser -KILL -k -m /data/local/mnt/
+
+for mt in $tmounts $tsmounts ;do
+	$busybox umount ${mnt}/${mt};
+done
+
+for mt in $bmounts ;do
+	$busybox umount ${mnt}/android/${mt};
+done
+
+$busybox umount $mnt/sys $mnt/proc $mnt/dev/pts 
+$busybox umount -d $mnt
+
+[ ! -d $mnt/bin ] || echo "I'm sorry, but something went wrong. You might want to reboot."
+
